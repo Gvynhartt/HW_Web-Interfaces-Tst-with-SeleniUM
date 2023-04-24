@@ -44,3 +44,4 @@ out/
 !**/src/main/**
 !**/src/test/**
 !**/artifacts/app-order.jar
+!**/driver/webdrivermanager-5.3.2.jar
