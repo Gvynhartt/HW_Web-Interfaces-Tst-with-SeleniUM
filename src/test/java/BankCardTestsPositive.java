@@ -20,7 +20,7 @@ class BankCardTestsPositive {
 
     @BeforeAll
     static void setupAll() {
-        System.setProperty("webdriver.chrome.driver", "chromedriver_win32/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "./driver/chromedriver_win32/chromedriver.exe");
     }
 
     @BeforeEach
