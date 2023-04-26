@@ -40,15 +40,13 @@ class BankCardTestsPositive {
     }
 
     @Test
-    void shdTestShortPathCorrect() throws InterruptedException {
+    void shdTestShortPathCorrect() {
         driver.get("http://localhost:9999/");
         driver.findElement(By.xpath("//span[@data-test-id='name']/descendant::input[@name='name']")).sendKeys("Киктор Вислый-Анков");
-        // Добавлена двайная фамилия. Ещё ходят слухи, что поиск по X-Path стильнее, моднее и молодёжнее
         driver.findElement(By.xpath("//span[@data-test-id='phone']/descendant::input[@name='phone']")).sendKeys("+78005553535");
         driver.findElement(By.xpath("//label[@data-test-id='agreement']")).click();
-
-
-        driver.findElement(By.xpath("//div[@class='form-field form-field_size_m form-field_theme_alfa-on-white']/descendant::button[@role='button']")).click();
+        driver.findElement(By.xpath("//button[@role='button']/descendant::span[contains(text(), \"Продолжить\")]")).click();
+        // Здесь и далее - применён более надёжный локатор для кнопки отправки формы.
         String expected = "Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.";
         String actual = driver.findElement(By.cssSelector("[data-test-id='order-success']")).getText().trim();
         assertEquals(expected, actual);

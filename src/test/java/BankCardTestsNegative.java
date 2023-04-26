@@ -44,9 +44,10 @@ class BankCardTestsNegative {
         driver.findElement(By.xpath("//span[@data-test-id='name']/descendant::input[@name='name']")).sendKeys("abobus3450d");
         driver.findElement(By.xpath("//span[@data-test-id='phone']/descendant::input[@name='phone']")).sendKeys("+78005553535");
         driver.findElement(By.xpath("//label[@data-test-id='agreement']")).click();
-        driver.findElement(By.xpath("//div[@class='form-field form-field_size_m form-field_theme_alfa-on-white']/descendant::button[@role='button']")).click();
+        driver.findElement(By.xpath("//button[@role='button']/descendant::span[contains(text(), \"Продолжить\")]")).click();
         String expected = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
-        String actual = driver.findElement(By.xpath("//span[contains(@class,'input_invalid')]/descendant::span[@class='input__sub']")).getText();
+        String actual = driver.findElement(By.xpath("//span[@data-test-id='name' and contains(@class,'input_invalid')]/descendant::span[@class='input__sub']")).getText();
+        // теперь есть и привязка к тестовой метке, и проверка на наличие класса 'input_invalid'
         assertEquals(expected, actual);
     }
 
@@ -56,9 +57,9 @@ class BankCardTestsNegative {
         driver.findElement(By.xpath("//span[@data-test-id='name']/descendant::input[@name='name']")).sendKeys("Киктор Вислый-Анков");
         driver.findElement(By.xpath("//span[@data-test-id='phone']/descendant::input[@name='phone']")).sendKeys("+100500");
         driver.findElement(By.xpath("//label[@data-test-id='agreement']")).click();
-        driver.findElement(By.xpath("//div[@class='form-field form-field_size_m form-field_theme_alfa-on-white']/descendant::button[@role='button']")).click();
+        driver.findElement(By.xpath("//button[@role='button']/descendant::span[contains(text(), \"Продолжить\")]")).click();
         String expected = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
-        String actual = driver.findElement(By.xpath("//span[contains(@class,'input_invalid')]/descendant::span[@class='input__sub']")).getText();
+        String actual = driver.findElement(By.xpath("//span[@data-test-id='phone' and contains(@class,'input_invalid')]/descendant::span[@class='input__sub']")).getText();
         assertEquals(expected, actual);
     }
 
@@ -68,13 +69,11 @@ class BankCardTestsNegative {
         driver.findElement(By.xpath("//span[@data-test-id='name']/descendant::input[@name='name']")).sendKeys("Киктор Вислый-Анков");
         driver.findElement(By.xpath("//span[@data-test-id='phone']/descendant::input[@name='phone']")).sendKeys("+78005553535");
         // пропускаем нажатие на метку чекбокса
-        driver.findElement(By.xpath("//div[@class='form-field form-field_size_m form-field_theme_alfa-on-white']/descendant::button[@role='button']")).click();
-        // Теперь пропуск галки проверяется, как всё остальное - через X-Path по наличию класса ошибки в разметке. И да, я сравниваю с null (300 IQ).
-        boolean expected = true;
-        boolean actual = false;
-        if ( driver.findElement(By.xpath("//label[contains(@class,'input_invalid')]/descendant::span[@class='checkbox__text']")) != null ) {
-            actual = true;
-        }
+        driver.findElement(By.xpath("//button[@role='button']/descendant::span[contains(text(), \"Продолжить\")]")).click();
+        // Теперь пропуск галки проверяется, как всё остальное - через X-Path по наличию класса ошибки в разметке.
+        boolean expected = false;
+        boolean actual = driver.findElement(By.xpath("//label[@data-test-id='agreement']/descendant::input[@class='checkbox__control']")).isSelected();
+        // Развилка с if заменена сравнением с логической переменной, полученной проверкой состояния элемента.
         assertEquals(expected, actual);
     }
 
@@ -84,7 +83,7 @@ class BankCardTestsNegative {
         // пропускаем ввод имени
         driver.findElement(By.xpath("//span[@data-test-id='phone']/descendant::input[@name='phone']")).sendKeys("+78005553535");
         driver.findElement(By.xpath("//label[@data-test-id='agreement']")).click();
-        driver.findElement(By.xpath("//div[@class='form-field form-field_size_m form-field_theme_alfa-on-white']/descendant::button[@role='button']")).click();
+        driver.findElement(By.xpath("//button[@role='button']/descendant::span[contains(text(), \"Продолжить\")]")).click();
         String expected = "Поле обязательно для заполнения";
         String actual = driver.findElement(By.xpath("//span[@data-test-id='name'][contains(@class,'input_invalid')]/descendant::span[@class='input__sub']")).getText();
         assertEquals(expected, actual);
@@ -96,7 +95,7 @@ class BankCardTestsNegative {
         driver.findElement(By.xpath("//span[@data-test-id='name']/descendant::input[@name='name']")).sendKeys("Киктор Вислый-Анков");
         // пропускаем ввод номера
         driver.findElement(By.xpath("//label[@data-test-id='agreement']")).click();
-        driver.findElement(By.xpath("//div[@class='form-field form-field_size_m form-field_theme_alfa-on-white']/descendant::button[@role='button']")).click();
+        driver.findElement(By.xpath("//button[@role='button']/descendant::span[contains(text(), \"Продолжить\")]")).click();
         String expected = "Поле обязательно для заполнения";
         String actual = driver.findElement(By.xpath("//span[@data-test-id='phone'][contains(@class,'input_invalid')]/descendant::span[@class='input__sub']")).getText();
         assertEquals(expected, actual);
@@ -107,7 +106,7 @@ class BankCardTestsNegative {
     void shdTestFormSubmitWithZeroInput() {
         driver.get("http://localhost:9999/");
         // пропускаем ввод во все поля и нажатие на галку
-        driver.findElement(By.xpath("//div[@class='form-field form-field_size_m form-field_theme_alfa-on-white']/descendant::button[@role='button']")).click();
+        driver.findElement(By.xpath("//button[@role='button']/descendant::span[contains(text(), \"Продолжить\")]")).click();
         String expected = "Поле обязательно для заполнения";
         String actual = driver.findElement(By.xpath("//span[@data-test-id='name'][contains(@class,'input_invalid')]/descendant::span[@class='input__sub']")).getText();
         assertEquals(expected, actual);
